@@ -1,5 +1,5 @@
 # zad123
-Project in construction, its not finishrd jet
+Project in construction, its not finished yet
 
 *todo
         class mai
