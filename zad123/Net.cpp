@@ -13,14 +13,13 @@ Net::Net(int file_size, int frame_size, char** get_buffers) {
     this->file_size = file_size;
     this->frame_size = frame_size;
     this->get_buffers = get_buffers;
-    this->send_buffers = new char* [iter() + 1];
     Logs::logcreatenetsucces();
     
 }
 
 Net::~Net() {
     Logs::logdeletenetsucces();
-    delete[] send_buffers; // Usuñ send_buffers, ale nie get_buffers, poniewa¿ nie zosta³ zaalokowany dynamicznie
+    delete[] send_buffers, get_buffers; // Usuñ send_buffers, ale nie get_buffers, poniewa¿ nie zosta³ zaalokowany dynamicznie
 }
 
 void Net::set_get_buffers(char** get_buffers) {
@@ -59,13 +58,17 @@ void Net::randoming() {
     //random_device rd;
     //mt19937 gen(rd()); // U¿yj generatora liczb pseudolosowych z <random>
     //uniform_int_distribution<> distr(0, arraySize - 1);
-    
-    int* myArray = new int[iter()+1];
-    for (int i = 0; i < iter()+1; ++i) {
+    if (iter() * 128 < file_size)
+        lenght_array = iter() + 1;
+    else
+        lenght_array = iter();
+    this->send_buffers = new char* [lenght_array];
+    int* myArray = new int[lenght_array];
+    for (int i = 0; i < lenght_array; ++i) {
         bool isUnique;
         do {
             isUnique = true;
-            myArray[i] = std::rand() % (iter()+1); // Adjust the range as needed
+            myArray[i] = std::rand() % (lenght_array); // Adjust the range as needed
             for (int j = 0; j < i; ++j) {
                 if (myArray[i] == myArray[j]) {
                     isUnique = false;
@@ -74,12 +77,15 @@ void Net::randoming() {
             }
         } while (!isUnique);
     }
-    cout << "\n\n\n\n\n\n\n\n\n";
-    for (int i = 0; i < iter() + 1; i++)
+    //cout << "\n\n\n\n\n\n\n\n\n";
+    for (int i = 0; i < lenght_array; i++)
         this->send_buffers[myArray[i]] = this->get_buffers[i];
-    /*for (int i = 0; i <= iter(); i++)
+    cout << "\n\n\n\n\n";
+    for (int i = 0; i < lenght_array; i++)
         for (int j = 0; j < this->frame_size; j++)
-            cout << send_buffers[i][j];*/
+            if(send_buffers[i]!=NULL)
+                cout << send_buffers[i][j];
+    cout << "\n\n\n\n\n";
     delete[] myArray;
     //for (int i = iter(); i > 0; --i) {
     //    int j = distr(gen); // U¿yj dystrybucji pseudolosowej zamiast rand()

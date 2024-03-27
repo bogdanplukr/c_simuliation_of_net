@@ -36,6 +36,7 @@ private:
 	char** send_buffers;
 	bool get_string;
 	Connection con;
+	int lenght_array;
 	//Net* net;
 };
 

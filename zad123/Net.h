@@ -24,6 +24,7 @@ private:
 	char** get_buffers;
 	int frame_size;
 	int file_size;
+	int lenght_array;
 	//decoder* dec;
 };
 

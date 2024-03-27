@@ -23,6 +23,7 @@ private:
     int iter();
     int get_numerico(char* send_buffers, int iter);
     char* rezult;
+    int lenght_array;
 };
 
 #endif // DECODERS_H
